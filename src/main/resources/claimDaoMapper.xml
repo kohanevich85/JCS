@@ -1,0 +1,19 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.screwfix.claim.statistics.dao.ClaimDAO">
+    <resultMap id="claim" type="com.screwfix.claim.statistics.models.Claim">
+        <id property="id" column="id"/>
+        <result property="jobName" column="job_name"/>
+        <result property="user" column="claimed_by"/>
+        <result property="reason" column="reason"/>
+        <result property="startClaim" column="start_date_claim"/>
+        <result property="endClaim" column="end_date_claim"/>
+    </resultMap>
+    <select id="findClaimById" parameterType="com.screwfix.claim.statistics.models.FilterParams"  resultMap="claim" >
+        SELECT id, job_name, claimed_by, reason, start_date_claim, end_date_claim
+            FROM ci_claim_build
+                WHERE (1=1)
+            <if test="jobName != null">
+                AND job_name = #{jobName}
+            </if>
+    </select>
+</mapper>

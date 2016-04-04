@@ -1,0 +1,66 @@
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #ccffcc;
+}
+
+.headline {
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 40px;
+    text-align: center;
+}
+
+.tab-fonts {
+    font-family: Impact, Charcoal, sans-serif;
+    font-size: 20px;
+}
+
+table.custom-table {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+table.custom-table thead .sorting {
+    background: url("/images/sort_both.png") no-repeat center right;
+}
+
+table.custom-table thead .sorting-asc {
+    background: url("/images/sort_asc.png") no-repeat center right;
+}
+
+table.custom-table thead .sorting-desc {
+    background: url("/images/sort_desc.png") no-repeat center right;
+}
+
+.custom-img {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    height: 39px;
+    width: 160px;
+
+}
+
+html body .ul.pager label.col-md-1.col-md-offset-5 {
+    padding-right: 0;
+    padding-left: 30px;
+}
+
+.table {
+    table-layout:fixed;
+}
+
+.table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.width-5per {
+    width: 5%;
+}
+
+.width-10per {
+    width: 10%;
+}
+
+.width-15per {
+    width: 15%;
+}
