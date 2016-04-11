@@ -13,12 +13,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-
 @Path("/api/claims")
 @Produces(MediaType.APPLICATION_JSON)
 public class ClaimsResource {
-    private static final Logger LOGGER = Logger.getLogger(ClaimsResource.class);
+    private static final Logger LOGGER = Logger.getLogger(ClaimsResource.class); // TODO:
     private final ClaimDAO claimDao;
 
     @Inject
@@ -26,10 +24,8 @@ public class ClaimsResource {
         this.claimDao = claimDao;
     }
 
-    // TODO: service
     @POST
     public List<Claim> getClaims(@BeanParam FilterParams paramBean) {
-        System.out.println(paramBean);
-        return asList(claimDao.findClaimById(paramBean));
+        return claimDao.findClaims(paramBean);
     }
 }

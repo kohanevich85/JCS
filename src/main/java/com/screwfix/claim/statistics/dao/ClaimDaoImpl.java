@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by Denys_Kohanevych on 4/1/2016
@@ -14,24 +15,20 @@ import javax.inject.Inject;
 public class ClaimDaoImpl implements ClaimDAO {
 
     private static final Logger LOGGER = Logger.getLogger(ClaimDaoImpl.class);
-    @Inject
     private SqlSessionFactory sessionFactory;
 
     @Override
-    public Claim findClaimById(FilterParams params) {
-        SqlSession session = sessionFactory.openSession();
-        try {
+    public List<Claim> findClaims(FilterParams params) {
+        try (SqlSession session = sessionFactory.openSession()) {
             ClaimDAO mapper = session.getMapper(ClaimDAO.class);
-            return mapper.findClaimById(params);
-        }catch (Exception e){
+            return mapper.findClaims(params);
+        } catch (Exception e) {
             LOGGER.error(e);
             throw new RuntimeException(e);
-        } finally {
-            session.close();
         }
     }
 
-    //@Inject
+    @Inject
     public void setSessionFactory(SqlSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

@@ -8,8 +8,6 @@ import com.google.inject.Singleton;
 import com.screwfix.claim.statistics.dao.ClaimDAO;
 import com.screwfix.claim.statistics.dao.ClaimDaoImpl;
 import com.screwfix.claim.statistics.health.QuartzHealthCheck;
-import com.screwfix.claim.statistics.models.Claim;
-import com.screwfix.claim.statistics.models.FilterParams;
 import com.screwfix.claim.statistics.resources.ClaimsResource;
 import com.screwfix.claim.statistics.resources.HomeResource;
 import com.screwfix.claim.statistics.services.GuiceJobFactory;
@@ -17,7 +15,6 @@ import com.screwfix.claim.statistics.services.JobConfigurator;
 import com.screwfix.claim.statistics.services.QuartzManager;
 import com.screwfix.claim.statistics.services.XmlLoader;
 import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.setup.Environment;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.log4j.Logger;
@@ -35,11 +32,9 @@ import static org.apache.ibatis.io.Resources.getResourceAsStream;
 public class CoreModule extends AbstractModule {
     private static final Logger LOGGER = Logger.getLogger(CoreModule.class);
     private StatisticsConfiguration configuration;
-    private Environment environment;  // TODO: remove
 
-    public CoreModule(StatisticsConfiguration configuration, Environment environment) {
+    public CoreModule(StatisticsConfiguration configuration) {
         this.configuration = configuration;
-        this.environment = environment;
     }
 
     @Override
@@ -50,7 +45,7 @@ public class CoreModule extends AbstractModule {
         bind(QuartzHealthCheck.class).in(Singleton.class);
         bind(JobConfigurator.class).in(Singleton.class);
         bind(ClaimsResource.class).in(Singleton.class);
-        bind(HomeResource.class).in(Singleton.class);
+        bind(HomeResource.class).in(Singleton.class);  // TODO
         bind(ClaimDAO.class).to(ClaimDaoImpl.class);
     }
 
@@ -83,24 +78,4 @@ public class CoreModule extends AbstractModule {
     public StatisticsConfiguration provideConfiguration() {
         return configuration;
     }
-
-    /*public static void main(String[] args) throws IOException {
-        Properties prop = new Properties();
-        Map<String, String> properties = new Builder<String, String>()
-                .put("user", "user").put("password", "pwd")
-                .put("url", "jdbc:h2:file:d:/projects/db/h2_2/jenkins_claim_statistics")
-                .put("driverClass", "org.h2.Driver")
-                .build();
-        prop.putAll(properties);
-        SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
-        SqlSessionFactory sessionFactory = sqlSessionFactoryBuilder.build(getResourceAsStream("mybatis-config.xml"), prop);
-        ClaimDaoImpl claimDao = new ClaimDaoImpl();
-        claimDao.setSessionFactory(sessionFactory);
-        FilterParams filterParams = new FilterParams();
-       *//* filterParams.setJobName("JOB_1");
-        filterParams.setUser("USER_1");
-        filterParams.setReason("REASON_1");*//*
-        Claim claimById = claimDao.findClaimById(filterParams);
-        System.out.println(claimById);
-    }*/
 }

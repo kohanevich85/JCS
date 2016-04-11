@@ -8,12 +8,37 @@
         <result property="startClaim" column="start_date_claim"/>
         <result property="endClaim" column="end_date_claim"/>
     </resultMap>
-    <select id="findClaimById" parameterType="com.screwfix.claim.statistics.models.FilterParams"  resultMap="claim" >
+    <select id="findClaims" parameterType="com.screwfix.claim.statistics.models.FilterParams" resultMap="claim">
         SELECT id, job_name, claimed_by, reason, start_date_claim, end_date_claim
-            FROM ci_claim_build
-                WHERE (1=1)
-            <if test="jobName != null">
-                AND job_name = #{jobName}
-            </if>
+        FROM ci_claim_build
+        WHERE (1=1)
+        <if test="jobName != ''">AND job_name LIKE '%' || #{jobName} || '%'</if>
+        <if test="user != ''">AND claimed_by LIKE '%' || #{user} || '%'</if>
+        <if test="reason != ''">AND reason LIKE '%' || #{reason} || '%'</if>
+        <choose>
+            <when test="isActiveClaim == 'not_active'">
+                AND end_date_claim IS NOT NULL
+                <if test="duration != ''">
+                    AND DATEDIFF('DAY', start_date_claim, end_date_claim) > #{duration}
+                </if>
+            </when>
+            <when test="isActiveClaim == 'active'">
+                AND end_date_claim IS NULL
+                <if test="duration != ''">
+                    AND DATEDIFF('DAY', start_date_claim, CURRENT_DATE()) > #{duration}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <if test="sortType != '' and sortField != ''">
+            ORDER BY ${sortField} ${sortType}
+        </if>
+        <if test="limit > 0">
+            LIMIT #{limit}
+        </if>
+        <if test="items > 0">
+            OFFSET #{offset}
+        </if>
     </select>
 </mapper>

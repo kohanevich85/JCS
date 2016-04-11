@@ -34,7 +34,7 @@ public class StatisticsApplication extends Application<StatisticsConfiguration> 
 
     @Override
     public void run(StatisticsConfiguration configuration, Environment environment) {
-        Injector injector = Guice.createInjector(new CoreModule(configuration, environment));
+        Injector injector = Guice.createInjector(new CoreModule(configuration));
         QuartzManager quartz = injector.getInstance(QuartzManager.class);
         QuartzHealthCheck quartzHealthCheck = injector.getInstance(QuartzHealthCheck.class);
         ClaimsResource claimsResource = injector.getInstance(ClaimsResource.class);
