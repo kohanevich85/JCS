@@ -1,7 +1,5 @@
 package com.screwfix.claim.statistics.models;
 
-import com.google.common.base.Strings;
-
 import javax.ws.rs.FormParam;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -132,7 +130,7 @@ public class FilterParams {
         return isNullOrEmpty(items) ? MAX_PER_PAGE + 1 : valueOf(items) + 1;
     }
 
-    @Override
+    @Override // TODO: remove?
     public String toString() {
         return "FilterParams{" +
                 "page='" + page + '\'' +
