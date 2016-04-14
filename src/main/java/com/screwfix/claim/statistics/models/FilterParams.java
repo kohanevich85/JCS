@@ -1,18 +1,22 @@
 package com.screwfix.claim.statistics.models;
 
+
 import javax.ws.rs.FormParam;
+import java.time.format.DateTimeFormatter;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static java.lang.Integer.valueOf;
+import static java.time.LocalDate.parse;
+import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class FilterParams {
     private static final int MAX_PER_PAGE = 10;
+    private static final String PATTERN = "MM/dd/yyyy";
+    private static final DateTimeFormatter FORMATTER = ofPattern(PATTERN);
 
     @FormParam("page")          private String page = "";
     @FormParam("items")         private String items = "";
     @FormParam("sortField")     private String sortField = "";
     @FormParam("sortType")      private String sortType = "";
-
     @FormParam("user")          private String user = "";
     @FormParam("jobName")       private String jobName = "";
     @FormParam("reason")        private String reason = "";
@@ -94,7 +98,7 @@ public class FilterParams {
     }
 
     public String getDateFrom() {
-        return dateFrom;
+        return isNullOrEmpty(dateFrom) ? "" : parse(dateFrom, FORMATTER).toString();
     }
 
     public FilterParams setDateFrom(String dateFrom) {
@@ -103,7 +107,7 @@ public class FilterParams {
     }
 
     public String getDateTo() {
-        return dateTo;
+        return isNullOrEmpty(dateTo) ? "" : parse(dateTo, FORMATTER).toString();
     }
 
     public FilterParams setDateTo(String dateTo) {
@@ -121,13 +125,12 @@ public class FilterParams {
     }
 
     public int getOffset() {
-        int iPage = valueOf(page);
-        return iPage == 0 ? 0 :
-                (isNullOrEmpty(items) ? (iPage - 1) * MAX_PER_PAGE : (iPage - 1) * valueOf(items));
+        int iPage = Integer.valueOf(page);
+        return iPage == 0 ? 0 : (isNullOrEmpty(items) ? (iPage - 1) * MAX_PER_PAGE : (iPage - 1) * Integer.valueOf(items));
     }
 
     public int getLimit() {
-        return isNullOrEmpty(items) ? MAX_PER_PAGE + 1 : valueOf(items) + 1;
+        return isNullOrEmpty(items) ? MAX_PER_PAGE + 1 : Integer.valueOf(items) + 1;
     }
 
     @Override // TODO: remove?

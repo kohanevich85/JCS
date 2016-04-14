@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import com.screwfix.claim.statistics.dao.ClaimDAO;
 import com.screwfix.claim.statistics.health.QuartzHealthCheck;
 import com.screwfix.claim.statistics.resources.ClaimsResource;
-import com.screwfix.claim.statistics.services.GuiceJobFactory;
+import com.screwfix.claim.statistics.core.service.GuiceJobFactory;
 import com.screwfix.claim.statistics.services.JobConfigurator;
 import com.screwfix.claim.statistics.services.QuartzManager;
 import com.screwfix.claim.statistics.services.XmlLoader;

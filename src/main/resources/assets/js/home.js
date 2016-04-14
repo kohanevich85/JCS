@@ -44,7 +44,6 @@ var init = function () {
 
     $('#reset_button').click(function () {
         resetForm();
-        hideAlerts();
         filter_form.submit();
     });
 
@@ -68,10 +67,6 @@ var init = function () {
     $('#items_per_page').on('change', function () {
         claimState.maxRow = parseInt(this.value);
         filter_form.submit();
-    });
-
-    $('#dateFromMessage').change(function () {
-        $('#dateFromMessage').hide();
     });
 
     $(function () {
@@ -129,12 +124,6 @@ var callbackInit = function () {
     });
 };
 
-var hideAlerts = function () {
-    $('#dateFromMessage').hide();
-    $('#dateToMessage').hide();
-    $('#dateFrom').removeClass("has-error");
-};
-
 var resetForm = function () {
     $('#filter_form')[0].reset();
     claimState.page = 1;
@@ -146,11 +135,6 @@ var bindFormFilter = function () {
 
 var submitForm = function (e) {
     e.preventDefault();
-    if ($('#dateToInput').val().length > 0 && $('#dateFromInput').val().length == 0) {
-        $('#dateFrom').addClass("has-error");
-        $('#dateFromMessage').show();
-        return;
-    }
     var postData = $(this).serializeArray();
     postData[postData.length] = {name: "page", value: claimState.page};
     postData[postData.length] = {name: "items", value: claimState.maxRow};
@@ -162,7 +146,6 @@ var submitForm = function (e) {
         type: "POST",
         data: postData,
         success: function (json) {
-            hideAlerts();
             showButtons(json.length > claimState.maxRow);
             drawTable(json);
             callbackInit()

@@ -5,12 +5,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.screwfix.claim.statistics.core.service.GuiceJobFactory;
 import com.screwfix.claim.statistics.dao.ClaimDAO;
 import com.screwfix.claim.statistics.dao.ClaimDaoImpl;
 import com.screwfix.claim.statistics.health.QuartzHealthCheck;
 import com.screwfix.claim.statistics.resources.ClaimsResource;
 import com.screwfix.claim.statistics.resources.HomeResource;
-import com.screwfix.claim.statistics.services.GuiceJobFactory;
 import com.screwfix.claim.statistics.services.JobConfigurator;
 import com.screwfix.claim.statistics.services.QuartzManager;
 import com.screwfix.claim.statistics.services.XmlLoader;
@@ -45,7 +45,7 @@ public class CoreModule extends AbstractModule {
         bind(QuartzHealthCheck.class).in(Singleton.class);
         bind(JobConfigurator.class).in(Singleton.class);
         bind(ClaimsResource.class).in(Singleton.class);
-        bind(HomeResource.class).in(Singleton.class);  // TODO
+        bind(HomeResource.class).in(Singleton.class);  // TODO: remove
         bind(ClaimDAO.class).to(ClaimDaoImpl.class);
     }
 
@@ -62,7 +62,7 @@ public class CoreModule extends AbstractModule {
         }
     }
 
-    @Provides
+    @Provides @Singleton
     public SqlSessionFactory provideSqlSessionFactory() throws URISyntaxException, IOException {
         DataSourceFactory ds = configuration.getDataSourceFactory();
         Properties prop = new Properties();

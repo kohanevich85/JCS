@@ -4,15 +4,15 @@ import com.screwfix.claim.statistics.models.Claim;
 import com.screwfix.claim.statistics.models.FilterParams;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import static java.util.Collections.singletonList;
+import static com.screwfix.claim.statistics.data.provider.ClaimDaoProvider.provideData;
 import static org.apache.ibatis.io.Resources.getResourceAsStream;
 
 /**
@@ -36,20 +36,12 @@ public class ClaimDaoImplTest {
 
     @DataProvider(name = "data")
     public Object[][] data() {
-        return new Object[][]{
-            {
-                new FilterParams().setJobName("JOB_1").setPage("1"),
-                singletonList(new Claim().setUser("USER_1").setJobName("JOB_1").setReason("REASON_1").setStartClaim(new Date()))
-            },
-        };
+        return provideData();
     }
 
     @Test(dataProvider = "data")
-    public void testClaimDao(FilterParams params, List<Claim> expectedClaims) throws Exception {
-        List<Claim> claims = claimDao.findClaims(params);
-        for (Claim claim : claims) {
-            System.out.println(claim);
-        }
-        System.out.println("done");
+    public void testClaimDao(FilterParams params, List<Claim> expected) throws Exception {
+        List<Claim> actual = claimDao.findClaims(params);
+        Assert.assertEquals(actual, expected);
     }
 }

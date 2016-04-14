@@ -5,16 +5,27 @@
         <result property="jobName" column="job_name"/>
         <result property="user" column="claimed_by"/>
         <result property="reason" column="reason"/>
-        <result property="startClaim" column="start_date_claim"/>
-        <result property="endClaim" column="end_date_claim"/>
+        <result property="startClaim" column="start_date_claim" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+        <result property="endClaim" column="end_date_claim" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
     </resultMap>
-    <select id="findClaims" parameterType="com.screwfix.claim.statistics.models.FilterParams" resultMap="claim">
+    <select useCache="true" id="findClaims" resultMap="claim" parameterType="com.screwfix.claim.statistics.models.FilterParams" >
         SELECT id, job_name, claimed_by, reason, start_date_claim, end_date_claim
         FROM ci_claim_build
         WHERE (1=1)
         <if test="jobName != ''">AND job_name LIKE '%' || #{jobName} || '%'</if>
         <if test="user != ''">AND claimed_by LIKE '%' || #{user} || '%'</if>
         <if test="reason != ''">AND reason LIKE '%' || #{reason} || '%'</if>
+        <choose>
+            <when test="dateFrom != '' and dateTo == ''">
+                AND start_date_claim BETWEEN #{dateFrom} AND CURDATE()
+            </when>
+            <when test="dateFrom != '' and dateTo != ''">
+                AND start_date_claim BETWEEN #{dateFrom} AND #{dateTo}
+            </when>
+            <when test="dateFrom == '' and dateTo != ''">
+                AND start_date_claim BETWEEN '2000-01-01' AND #{dateTo}
+            </when>
+        </choose>
         <choose>
             <when test="isActiveClaim == 'not_active'">
                 AND end_date_claim IS NOT NULL

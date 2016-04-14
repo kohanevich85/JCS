@@ -61,9 +61,6 @@
         <div class="col-sm-2">
             <input id="dateFromInput" class="form-control" type="text" name="dateFrom" placeholder="mm/dd/yyyy">
         </div>
-        <div id="dateFromMessage" class="col-sm-3 alert alert-danger" hidden>
-            Please fill the filed
-        </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-2" >Search To:</label>

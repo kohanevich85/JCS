@@ -1,14 +1,18 @@
 package com.screwfix.claim.statistics.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class Claim {
+    private static final DateTimeFormatter formatter = ofPattern("yyyy-MM-dd");
     private long id;
     private String jobName;
     private String user;
     private String reason;
-    private Date startClaim;
-    private Date endClaim;
+    private LocalDateTime startClaim;
+    private LocalDateTime endClaim;
 
     public String getJobName() {
         return jobName;
@@ -37,21 +41,21 @@ public class Claim {
         return this;
     }
 
-    public Date getStartClaim() {
-        return startClaim;
+    public String getEndClaim() {
+        return endClaim.format(formatter);
     }
 
-    public Claim setStartClaim(Date startClaim) {
-        this.startClaim = startClaim;
+    public Claim setEndClaim(LocalDateTime endClaim) {
+        this.endClaim = endClaim;
         return this;
     }
 
-    public Date getEndClaim() {
-        return endClaim;
+    public String getStartClaim() {
+        return startClaim.format(formatter);
     }
 
-    public Claim setEndClaim(Date endClaim) {
-        this.endClaim = endClaim;
+    public Claim setStartClaim(LocalDateTime startClaim) {
+        this.startClaim = startClaim;
         return this;
     }
 
