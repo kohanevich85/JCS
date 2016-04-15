@@ -31,7 +31,8 @@ server:
 logging:
   level: INFO
   loggers:
-    com.screwfix.claim.statistics.dao.ClaimDaoImpl: TRACE
+    io.dropwizard: ERROR
+    "com.screwfix.claim.statistics.dao.ClaimDaoImpl": TRACE
   appenders:
     - type: console
 

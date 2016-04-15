@@ -2,11 +2,12 @@ package com.screwfix.claim.statistics;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.screwfix.claim.statistics.health.QuartzHealthCheck;
+import com.screwfix.claim.statistics.core.CoreModule;
+import com.screwfix.claim.statistics.services.health.QuartzHealthCheck;
 import com.screwfix.claim.statistics.resources.ClaimsResource;
 import com.screwfix.claim.statistics.resources.HomeResource;
 import com.screwfix.claim.statistics.services.QuartzManager;
-import com.screwfix.claim.statistics.tasks.TestTask;
+import com.screwfix.claim.statistics.services.tasks.TestTask;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;

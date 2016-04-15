@@ -1,22 +1,15 @@
 Overview:
 	Java Application that allows to gather claim statistics per test and user.
 	Can gather information from currently existing builds at file system only.
-	main configuration file: claimStatistics.properties
+	main configuration file: jenkins-claim-statistics.yml
 	Automatically gathers and sends information based on configured two cron schedules
 	The application is not supposed to work in a multi-threaded environment!!!
 
 build:
 	mvn clean package
 
-execution environment creation:
-	copy target/lib/*;target/*.jar to your destination location
-	create claimStatistics.properties (take one from jar as example)
-	override required properties within the above file
+run:
+    java -jar target/JenkinsClaimStatistics-${version}.jar server jenkins-claim-statistics.yml
 
-run: java -Djava.net.preferIPv4Stack=true -jar JenkinsClaimStatistics-0.0.1-SNAPSHOT.jar
-
-
-
-*if you need to override log4j configuration:
-	create log4j.properties
-	add java argument to the jar start command, e.g. -Dlog4j.configuration=file:log4j.properties
+debug:
+    java -Xdebug -agentlib:jdwp=transport=dt_socket,address=9999,server=y,suspend=n -jar target/JenkinsClaimStatistics-${version}.jar server jenkins-claim-statistics.yml

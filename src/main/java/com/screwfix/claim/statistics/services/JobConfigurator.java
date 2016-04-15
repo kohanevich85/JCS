@@ -1,7 +1,7 @@
 package com.screwfix.claim.statistics.services;
 
 import com.screwfix.claim.statistics.StatisticsConfiguration;
-import com.screwfix.claim.statistics.jobs.UpdateDbJob;
+import com.screwfix.claim.statistics.services.jobs.UpdateDbJob;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;

@@ -1,6 +1,6 @@
 package com.screwfix.claim.statistics.resources;
 
-import com.screwfix.claim.statistics.dao.ClaimDAO;
+import com.screwfix.claim.statistics.services.dao.ClaimDao;
 import com.screwfix.claim.statistics.models.Claim;
 import com.screwfix.claim.statistics.models.FilterParams;
 import org.apache.log4j.Logger;
@@ -17,10 +17,10 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class ClaimsResource {
     private static final Logger LOGGER = Logger.getLogger(ClaimsResource.class); // TODO:
-    private final ClaimDAO claimDao;
+    private final ClaimDao claimDao;
 
     @Inject
-    public ClaimsResource(ClaimDAO claimDao) {
+    public ClaimsResource(ClaimDao claimDao) {
         this.claimDao = claimDao;
     }
 

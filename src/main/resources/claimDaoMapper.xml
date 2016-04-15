@@ -1,17 +1,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.screwfix.claim.statistics.dao.ClaimDAO">
+<mapper namespace="com.screwfix.claim.statistics.services.dao.ClaimDao">
     <resultMap id="claim" type="com.screwfix.claim.statistics.models.Claim">
         <id property="id" column="id"/>
         <result property="jobName" column="job_name"/>
         <result property="user" column="claimed_by"/>
         <result property="reason" column="reason"/>
-        <result property="startClaim" column="start_date_claim" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
-        <result property="endClaim" column="end_date_claim" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+        <result property="startClaim" column="start_date_claim" jdbcType="TIMESTAMP"/>
+        <result property="endClaim" column="end_date_claim" jdbcType="TIMESTAMP"/>
     </resultMap>
-    <select useCache="true" id="findClaims" resultMap="claim" parameterType="com.screwfix.claim.statistics.models.FilterParams" >
+
+    <sql id="baseQuery">
         SELECT id, job_name, claimed_by, reason, start_date_claim, end_date_claim
-        FROM ci_claim_build
-        WHERE (1=1)
+            FROM ci_claim_build
+                WHERE (1=1)
         <if test="jobName != ''">AND job_name LIKE '%' || #{jobName} || '%'</if>
         <if test="user != ''">AND claimed_by LIKE '%' || #{user} || '%'</if>
         <if test="reason != ''">AND reason LIKE '%' || #{reason} || '%'</if>
@@ -26,30 +27,26 @@
                 AND start_date_claim BETWEEN '2000-01-01' AND #{dateTo}
             </when>
         </choose>
+    </sql>
+
+    <select useCache="true" id="findClaims" resultMap="claim" parameterType="com.screwfix.claim.statistics.models.FilterParams" >
+        <include refid="baseQuery"/>
         <choose>
             <when test="isActiveClaim == 'not_active'">
                 AND end_date_claim IS NOT NULL
-                <if test="duration != ''">
-                    AND DATEDIFF('DAY', start_date_claim, end_date_claim) > #{duration}
-                </if>
+                <if test="duration != ''">AND DATEDIFF('DAY', start_date_claim, end_date_claim) > #{duration}</if>
             </when>
             <when test="isActiveClaim == 'active'">
                 AND end_date_claim IS NULL
-                <if test="duration != ''">
-                    AND DATEDIFF('DAY', start_date_claim, CURRENT_DATE()) > #{duration}
-                </if>
+                <if test="duration != ''">AND DATEDIFF('DAY', start_date_claim, CURRENT_DATE()) > #{duration}</if>
             </when>
             <otherwise>
+                UNION
+                <include refid="baseQuery"/>
             </otherwise>
         </choose>
-        <if test="sortType != '' and sortField != ''">
-            ORDER BY ${sortField} ${sortType}
-        </if>
-        <if test="limit > 0">
-            LIMIT #{limit}
-        </if>
-        <if test="items > 0">
-            OFFSET #{offset}
-        </if>
+        <if test="sortType != '' and sortField != ''">ORDER BY ${sortField} ${sortType}</if>
+        <if test="limit > 0">LIMIT #{limit}</if>
+        <if test="items > 0">OFFSET #{offset}</if>
     </select>
 </mapper>

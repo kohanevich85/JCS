@@ -31,7 +31,7 @@ server:
 logging:
   level: INFO
   loggers:
-    com.screwfix.claim.statistics.dao.ClaimDaoImpl: TRACE
+    com.screwfix.claim.statistics.services.dao.ClaimDaoImpl: TRACE
   appenders:
     - type: console
 

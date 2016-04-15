@@ -10,8 +10,8 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class FilterParams {
     private static final int MAX_PER_PAGE = 10;
-    private static final String PATTERN = "MM/dd/yyyy";
-    private static final DateTimeFormatter FORMATTER = ofPattern(PATTERN);
+    private static final String PATTERN = "MM/dd/yyyy"; // TODO; remove to static constans
+    private static final DateTimeFormatter FORMATTER = ofPattern(PATTERN); // TODO; remove to static constans
 
     @FormParam("page")          private String page = "";
     @FormParam("items")         private String items = "";

@@ -3,7 +3,6 @@
 <configuration>
     <settings>
         <setting name="logImpl" value="LOG4J"/>
-        <setting name="jdbcTypeForNull" value="NULL" />
     </settings>
     <typeHandlers>
         <typeHandler jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" handler="com.screwfix.claim.statistics.core.handlers.LocalDateTimeTypeHandler"/>

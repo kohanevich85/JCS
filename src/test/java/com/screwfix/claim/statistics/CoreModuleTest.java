@@ -2,8 +2,9 @@ package com.screwfix.claim.statistics;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.screwfix.claim.statistics.dao.ClaimDAO;
-import com.screwfix.claim.statistics.health.QuartzHealthCheck;
+import com.screwfix.claim.statistics.core.CoreModule;
+import com.screwfix.claim.statistics.services.dao.ClaimDao;
+import com.screwfix.claim.statistics.services.health.QuartzHealthCheck;
 import com.screwfix.claim.statistics.resources.ClaimsResource;
 import com.screwfix.claim.statistics.core.service.GuiceJobFactory;
 import com.screwfix.claim.statistics.services.JobConfigurator;
@@ -44,7 +45,7 @@ public class CoreModuleTest {
         assertNotNull(injector.getInstance(QuartzHealthCheck.class));
         assertNotNull(injector.getInstance(JobConfigurator.class));
         assertNotNull(injector.getInstance(ClaimsResource.class));
-        assertNotNull(injector.getInstance(ClaimDAO.class));
+        assertNotNull(injector.getInstance(ClaimDao.class));
         assertNotNull(injector.getInstance(Scheduler.class));
         assertNotNull(injector.getInstance(SqlSessionFactory.class));
         assertNotNull(injector.getInstance(StatisticsConfiguration.class));
