@@ -12,6 +12,12 @@ public class StatisticsConfiguration extends Configuration {
     @NotNull
     private String schedulerCron;
 
+    @NotNull
+    private String jobsPath;
+
+    @NotNull
+    private int analyzeDays;
+
     @Valid
     @NotNull
     private DataSourceFactory database = new DataSourceFactory();
@@ -34,5 +40,23 @@ public class StatisticsConfiguration extends Configuration {
     @JsonProperty("schedulerCron")
     public void setSchedulerCron(String schedulerCron) {
         this.schedulerCron = schedulerCron;
+    }
+
+    public String getJobsPath() {
+        return jobsPath;
+    }
+
+    @JsonProperty("jobsPath")
+    public void setJobsPath(String jobsPath) {
+        this.jobsPath = jobsPath;
+    }
+
+    public int getAnalyzeDays() {
+        return analyzeDays;
+    }
+
+    @JsonProperty("analyzeDays")
+    public void setAnalyzeDays(int analyzeDays) {
+        this.analyzeDays = analyzeDays;
     }
 }

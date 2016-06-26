@@ -8,13 +8,12 @@ import java.util.Optional;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class Claim {
-    private static final DateTimeFormatter FORMATTER = ofPattern("yyyy-MM-dd"); // TODO; remove to static constans
+    private static final DateTimeFormatter FORMATTER = ofPattern("yyyy-MM-dd"); // TODO; remove to static constant
     private long id;
     private String jobName;
     private String user;
     private String reason;
     private LocalDateTime startClaim;
-    @Nullable
     private LocalDateTime endClaim;
 
     public String getJobName() {
