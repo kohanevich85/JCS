@@ -4,19 +4,20 @@ import com.screwfix.claim.statistics.StatisticsConfiguration;
 import com.screwfix.claim.statistics.models.Build;
 
 import javax.inject.Inject;
-import java.nio.file.*;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
 import static java.nio.file.FileSystems.getDefault;
 import static java.nio.file.Files.readAttributes;
 import static java.nio.file.Files.walk;
@@ -24,7 +25,7 @@ import static java.time.Duration.between;
 import static java.time.LocalDateTime.parse;
 import static java.time.ZoneId.systemDefault;
 import static java.time.format.DateTimeFormatter.ofPattern;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.StreamSupport.stream;
 import static javax.xml.bind.JAXB.unmarshal;
 
@@ -33,15 +34,16 @@ public class XmlLoader {
     private static final String PATTERN = "(\\d{4})-(\\d{2})-(\\d{2})_(\\d{2})-(\\d{2})-(\\d{2})";
     private static final DateTimeFormatter FORMATTER = ofPattern("yyyy-MM-dd_HH-mm-ss");
     private static final PathMatcher EXT_MATCHER = getDefault().getPathMatcher("glob:**build.xml");
+    private static final Pattern pattern = Pattern.compile("((\\w*[^\\\\])(?=\\\\builds))");
+
     private StatisticsConfiguration configuration;
 
-    public List<Build> loadXml() {
+    public Map<String, List<Build>> loadXml() {
         try {
             return walk(Paths.get(getJobsPath()))
                     .filter(EXT_MATCHER::matches)
                     .filter(this::matchByFolderName)
-                    .map(this::transform)
-                    .collect(toList());
+                    .collect(groupingBy(this::resolveJobName, mapping(this::transform, toList())));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -57,6 +59,12 @@ public class XmlLoader {
         } catch (Exception e) {
             throw new RuntimeException();
         }
+    }
+
+    private String resolveJobName(Path path) {
+        Matcher matcher = pattern.matcher(path.toString());
+        if (matcher.find()) return matcher.group();
+        else                return "";
     }
 
     private boolean matchByFolderName(Path path) {
