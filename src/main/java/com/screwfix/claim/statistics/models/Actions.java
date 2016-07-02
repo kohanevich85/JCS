@@ -17,14 +17,13 @@ public class Actions {
     }
 
     @XmlElement(name = "hudson.plugins.claim.ClaimBuildAction")
-    public void setActions(List<Action> actions) {
+    public Actions setActions(List<Action> actions) {
         this.actions = actions;
+        return this;
     }
 
     @Override
     public String toString() {
-        return "Actions{" +
-                "actions=" + actions +
-                '}';
+        return "Actions{actions=" + actions + '}';
     }
 }

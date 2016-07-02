@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<build>
+    <actions>
+        <hudson.model.CauseAction>
+            <causes>
+                <hudson.model.Cause_-UserCause>
+                    <authenticationName>mussy</authenticationName>
+                </hudson.model.Cause_-UserCause>
+            </causes>
+        </hudson.model.CauseAction>
+        <org.jenkinsci.plugins.envinject.EnvInjectPluginAction plugin="envinject@1.87">
+            <build class="build" reference="../../.."/>
+        </org.jenkinsci.plugins.envinject.EnvInjectPluginAction>
+        <hudson.plugins.claim.ClaimBuildAction plugin="claim@1.7">
+            <claimed>true</claimed>
+            <claimedBy>user_1</claimedBy>
+            <transientClaim>false</transientClaim>
+            <owner class="build" reference="../../.."/>
+            <reason>something wrong</reason>
+        </hudson.plugins.claim.ClaimBuildAction>
+    </actions>
+    <number>65</number>
+    <startTime>1438668404899</startTime>
+    <result>FAILURE</result>
+    <duration>1200292</duration>
+    <charset>windows-1252</charset>
+    <keepLog>false</keepLog>
+    <builtOn>Selenium_Runner_PC010307</builtOn>
+    <workspace>workspace</workspace>
+    <hudsonVersion>1.509.1</hudsonVersion>
+    <scm class="hudson.scm.NullChangeLogParser"/>
+    <culprits class="com.google.common.collect.EmptyImmutableSortedSet"/>
+</build>

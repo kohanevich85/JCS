@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<build>
+    <actions>
+        <hudson.model.CauseAction>
+            <causes>
+                <hudson.model.Cause_-UpstreamCause>
+                    <upstreamProject>_CI_KIOSK_PLAN</upstreamProject>
+                    <upstreamUrl>job/_CI_KIOSK_PLAN/</upstreamUrl>
+                    <upstreamBuild>127</upstreamBuild>
+                    <upstreamCauses>
+                        <hudson.triggers.TimerTrigger_-TimerTriggerCause/>
+                    </upstreamCauses>
+                </hudson.model.Cause_-UpstreamCause>
+            </causes>
+        </hudson.model.CauseAction>
+        <org.jenkinsci.plugins.envinject.EnvInjectPluginAction plugin="envinject@1.87">
+            <build class="build" reference="../../.."/>
+        </org.jenkinsci.plugins.envinject.EnvInjectPluginAction>
+    </actions>
+    <number>59</number>
+    <startTime>1438318853790</startTime>
+    <result>SUCCESS</result>
+    <duration>531901</duration>
+    <charset>windows-1252</charset>
+    <keepLog>false</keepLog>
+    <builtOn>Selenium_Runner_PC010309</builtOn>
+    <workspace>workspace</workspace>
+    <hudsonVersion>1.509.1</hudsonVersion>
+    <scm class="hudson.scm.NullChangeLogParser"/>
+    <culprits class="com.google.common.collect.EmptyImmutableSortedSet"/>
+</build>

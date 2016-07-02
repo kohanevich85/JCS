@@ -20,16 +20,18 @@ public class Build {
         return actions;
     }
 
-    public void setActions(Actions actions) {
+    public Build setActions(Actions actions) {
         this.actions = actions;
+        return this;
     }
 
     public String getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public Build setResult(String result) {
         this.result = result;
+        return this;
     }
 
     public LocalDateTime getBuildDate() {

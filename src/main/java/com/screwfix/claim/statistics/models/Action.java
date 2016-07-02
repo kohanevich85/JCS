@@ -18,8 +18,9 @@ public class Action {
         return claimed;
     }
 
-    public void setClaimed(boolean claimed) {
+    public Action setClaimed(boolean claimed) {
         this.claimed = claimed;
+        return this;
     }
 
     public String getClaimedBy() {
@@ -30,8 +31,14 @@ public class Action {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public Action setReason(String reason) {
         this.reason = reason;
+        return this;
+    }
+
+    public Action setClaimedBy(String claimedBy) {
+        this.claimedBy = claimedBy;
+        return this;
     }
 
     @Override
