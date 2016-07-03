@@ -47,6 +47,10 @@ public class Claim {
         return Optional.ofNullable(endClaim).isPresent() ? endClaim.format(FORMATTER) : "active";
     }
 
+    public LocalDateTime getEndTimeClaim() {
+        return endClaim;
+    }
+
     public Claim setEndClaim(@Nullable LocalDateTime endClaim) {
         this.endClaim = endClaim;
         return this;
@@ -54,6 +58,10 @@ public class Claim {
 
     public String getStartClaim() {
         return startClaim.format(FORMATTER);
+    }
+
+    public LocalDateTime getStartTimeClaim() {
+        return startClaim;
     }
 
     public Claim setStartClaim(LocalDateTime startClaim) {

@@ -9,8 +9,6 @@ import javax.inject.Inject;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -20,11 +18,9 @@ import java.util.regex.Pattern;
 
 import static java.lang.Math.abs;
 import static java.nio.file.FileSystems.getDefault;
-import static java.nio.file.Files.readAttributes;
 import static java.nio.file.Files.walk;
 import static java.time.Duration.between;
 import static java.time.LocalDateTime.parse;
-import static java.time.ZoneId.systemDefault;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.StreamSupport.stream;
@@ -32,10 +28,10 @@ import static javax.xml.bind.JAXB.unmarshal;
 
 public class XmlLoader {
 
-    private static final String PATTERN = "(\\d{4})-(\\d{2})-(\\d{2})_(\\d{2})-(\\d{2})-(\\d{2})";
+    private static final String DATE_PATTERN = "(\\d{4})-(\\d{2})-(\\d{2})_(\\d{2})-(\\d{2})-(\\d{2})";
     private static final DateTimeFormatter FORMATTER = ofPattern("yyyy-MM-dd_HH-mm-ss");
     private static final PathMatcher EXT_MATCHER = getDefault().getPathMatcher("glob:**build.xml");
-    private static final Pattern pattern = Pattern.compile("((\\w*[^\\\\])(?=\\\\builds))");
+    private static final Pattern JOB_NAME_PATTERN = Pattern.compile("((\\w*[^\\\\])(?=\\\\builds))");
 
     private StatisticsConfiguration configuration;
 
@@ -50,20 +46,8 @@ public class XmlLoader {
         }
     }
 
-    private boolean matchByCreationDate(Path path) {
-        try {
-            FileTime creationTime = readAttributes(path, BasicFileAttributes.class).creationTime();
-            LocalDateTime today = LocalDateTime.now();
-            LocalDateTime jobDay = creationTime.toInstant().atZone(systemDefault()).toLocalDateTime();
-            long days = between(today, jobDay).toDays();
-            return abs(days) < getDaysToAnalyze();
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
-    }
-
     private String resolveJobName(Path path) {
-        Matcher matcher = pattern.matcher(path.toString());
+        Matcher matcher = JOB_NAME_PATTERN.matcher(path.toString());
         if (matcher.find()) return matcher.group();
         else return "";
     }
@@ -78,7 +62,7 @@ public class XmlLoader {
     private LocalDateTime getJobDate(Path path) {
         return stream(path.getParent().spliterator(), false)
                 .map(Path::toString)
-                .filter(p -> p.matches(PATTERN))
+                .filter(p -> p.matches(DATE_PATTERN))
                 .map(input -> parse(input, FORMATTER))
                 .findFirst().get();
     }
@@ -94,7 +78,8 @@ public class XmlLoader {
                 .setResult(buildXml.getResult())
                 .setClaimed(action.isClaimed())
                 .setClaimedBy(action.getClaimedBy())
-                .setReason(action.getReason());
+                .setReason(action.getReason())
+                .setJobName(resolveJobName(path));
     }
 
     @Inject

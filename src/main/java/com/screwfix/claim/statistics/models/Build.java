@@ -5,8 +5,9 @@ import java.time.LocalDateTime;
 /**
  * Created by Denis on 7/2/2016
  */
-public class Build {
+public class Build implements Comparable<Build> {
 
+    private String jobName;
     private LocalDateTime buildDate;
     private String result;
     private boolean isClaimed;
@@ -58,10 +59,48 @@ public class Build {
         return this;
     }
 
+    public String getJobName() {
+        return jobName;
+    }
+
+    public Build setJobName(String jobName) {
+        this.jobName = jobName;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Build build = (Build) o;
+
+        if (isClaimed != build.isClaimed) return false;
+        if (buildDate != null ? !buildDate.equals(build.buildDate) : build.buildDate != null) return false;
+        if (claimedBy != null ? !claimedBy.equals(build.claimedBy) : build.claimedBy != null) return false;
+        if (jobName != null ? !jobName.equals(build.jobName) : build.jobName != null) return false;
+        if (reason != null ? !reason.equals(build.reason) : build.reason != null) return false;
+        if (result != null ? !result.equals(build.result) : build.result != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result1 = jobName != null ? jobName.hashCode() : 0;
+        result1 = 31 * result1 + (buildDate != null ? buildDate.hashCode() : 0);
+        result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
+        result1 = 31 * result1 + (isClaimed ? 1 : 0);
+        result1 = 31 * result1 + (claimedBy != null ? claimedBy.hashCode() : 0);
+        result1 = 31 * result1 + (reason != null ? reason.hashCode() : 0);
+        return result1;
+    }
+
     @Override
     public String toString() {
         return "Build{" +
-                "buildDate=" + buildDate +
+                "jobName='" + jobName + '\'' +
+                ", buildDate=" + buildDate +
                 ", result='" + result + '\'' +
                 ", isClaimed=" + isClaimed +
                 ", claimedBy='" + claimedBy + '\'' +
@@ -70,25 +109,7 @@ public class Build {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Build build = (Build) o;
-        if (isClaimed != build.isClaimed) return false;
-        if (buildDate != null ? !buildDate.equals(build.buildDate) : build.buildDate != null) return false;
-        if (claimedBy != null ? !claimedBy.equals(build.claimedBy) : build.claimedBy != null) return false;
-        if (reason != null ? !reason.equals(build.reason) : build.reason != null) return false;
-        if (result != null ? !result.equals(build.result) : build.result != null) return false;
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result1 = buildDate != null ? buildDate.hashCode() : 0;
-        result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
-        result1 = 31 * result1 + (isClaimed ? 1 : 0);
-        result1 = 31 * result1 + (claimedBy != null ? claimedBy.hashCode() : 0);
-        result1 = 31 * result1 + (reason != null ? reason.hashCode() : 0);
-        return result1;
+    public int compareTo(Build that) {
+        return this.getBuildDate().compareTo(that.getBuildDate());
     }
 }

@@ -22,8 +22,11 @@ public class XmlLoaderTest {
     private static final LocalDateTime _2016_01_01_00_00_00 = LocalDateTime.of(2016, 1, 1, 0, 0, 0);
     private static final LocalDateTime _2016_01_01_01_00_00 = LocalDateTime.of(2016, 1, 1, 1, 0, 0);
     private static final int ANALYZE_DAYS = 1000000;
-    private static final Build BUILD_SUCCESS = new Build().setResult("SUCCESS").setBuildDate(_2016_01_01_00_00_00);
+    private static final Build BUILD_SUCCESS = new Build().setResult("SUCCESS")
+                                                    .setJobName("job_1")
+                                                    .setBuildDate(_2016_01_01_00_00_00);
     private static final Build BUILD_CLAIMED = new Build().setResult("FAILURE")
+                                                    .setJobName("job_1")
                                                     .setBuildDate(_2016_01_01_01_00_00)
                                                     .setClaimed(true)
                                                     .setClaimedBy("user_1")

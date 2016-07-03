@@ -7,6 +7,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.screwfix.claim.statistics.StatisticsConfiguration;
 import com.screwfix.claim.statistics.core.service.GuiceJobFactory;
+import com.screwfix.claim.statistics.services.DataTransformer;
 import com.screwfix.claim.statistics.services.dao.ClaimDao;
 import com.screwfix.claim.statistics.services.dao.ClaimDaoImpl;
 import com.screwfix.claim.statistics.services.health.QuartzHealthCheck;
@@ -41,6 +42,7 @@ public class CoreModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(XmlLoader.class).in(Singleton.class);
+        bind(DataTransformer.class).in(Singleton.class);
         bind(QuartzManager.class).in(Singleton.class);
         bind(GuiceJobFactory.class).in(Singleton.class);
         bind(QuartzHealthCheck.class).in(Singleton.class);
