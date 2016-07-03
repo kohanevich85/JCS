@@ -1,10 +1,11 @@
 package com.screwfix.claim.statistics.services;
 
 import com.screwfix.claim.statistics.StatisticsConfiguration;
+import com.screwfix.claim.statistics.models.Action;
 import com.screwfix.claim.statistics.models.Build;
+import com.screwfix.claim.statistics.models.BuildXml;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
@@ -64,28 +65,36 @@ public class XmlLoader {
     private String resolveJobName(Path path) {
         Matcher matcher = pattern.matcher(path.toString());
         if (matcher.find()) return matcher.group();
-        else                return "";
+        else return "";
     }
 
     private boolean matchByFolderName(Path path) {
-        LocalDateTime jobDay = stream(path.getParent().spliterator(), false)
-                .map(Path::toString)
-                .filter(p -> p.matches(PATTERN))
-                .map(input -> parse(input, FORMATTER))
-                .findFirst().get();
+        LocalDateTime jobDay = getJobDate(path);
         LocalDateTime today = LocalDateTime.now();
         long days = between(today, jobDay).toDays();
         return abs(days) < getDaysToAnalyze();
     }
 
-    private Build transform(Path path) {
-        Build build = unmarshal(path.toFile(), Build.class);
-        LocalDateTime jobStartDate = stream(path.getParent().spliterator(), false)
+    private LocalDateTime getJobDate(Path path) {
+        return stream(path.getParent().spliterator(), false)
                 .map(Path::toString)
                 .filter(p -> p.matches(PATTERN))
                 .map(input -> parse(input, FORMATTER))
                 .findFirst().get();
-        return build.setBuildDate(jobStartDate);
+    }
+
+    private Build transform(Path path) {
+        BuildXml buildXml = unmarshal(path.toFile(), BuildXml.class);
+        Action action = buildXml.getActions()
+                .stream()
+                .findFirst()
+                .orElse(new Action());
+        return new Build()
+                .setBuildDate(getJobDate(path))
+                .setResult(buildXml.getResult())
+                .setClaimed(action.isClaimed())
+                .setClaimedBy(action.getClaimedBy())
+                .setReason(action.getReason());
     }
 
     @Inject

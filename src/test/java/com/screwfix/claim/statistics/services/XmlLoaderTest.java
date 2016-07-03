@@ -1,10 +1,6 @@
 package com.screwfix.claim.statistics.services;
 
-import com.beust.jcommander.internal.Lists;
-import com.google.common.collect.ImmutableMap;
 import com.screwfix.claim.statistics.StatisticsConfiguration;
-import com.screwfix.claim.statistics.models.Action;
-import com.screwfix.claim.statistics.models.Actions;
 import com.screwfix.claim.statistics.models.Build;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,21 +8,26 @@ import org.junit.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import static com.beust.jcommander.internal.Lists.newArrayList;
 import static com.google.common.collect.ImmutableMap.of;
 import static com.google.common.collect.Maps.newHashMap;
-import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class XmlLoaderTest {
 
+    private static final LocalDateTime _2016_01_01_00_00_00 = LocalDateTime.of(2016, 1, 1, 0, 0, 0);
+    private static final LocalDateTime _2016_01_01_01_00_00 = LocalDateTime.of(2016, 1, 1, 1, 0, 0);
     private static final int ANALYZE_DAYS = 1000000;
-    private static final Build BUILD_SUCCESS = prepareBuildSuccess();
-    private static final Build BUILD_CLAIMED = prepareBuildClaimed();
+    private static final Build BUILD_SUCCESS = new Build().setResult("SUCCESS").setBuildDate(_2016_01_01_00_00_00);
+    private static final Build BUILD_CLAIMED = new Build().setResult("FAILURE")
+                                                    .setBuildDate(_2016_01_01_01_00_00)
+                                                    .setClaimed(true)
+                                                    .setClaimedBy("user_1")
+                                                    .setReason("something wrong");
     private static final Map<String, List<Build>> JOBS =
             newHashMap(of("job_1", newArrayList(BUILD_SUCCESS, BUILD_CLAIMED)));
     private XmlLoader loader;
@@ -44,17 +45,6 @@ public class XmlLoaderTest {
     @Test
     public void test() throws Exception {
         Map<String, List<Build>> result = loader.loadXml();
-        /*assertEquals(JOBS, result);*/
-        assertEquals(1, result.size());
-        assertEquals(2, result.get("job_1").size());
-    }
-
-    private static Build prepareBuildSuccess() {
-        return new Build().setResult("SUCCESS").setActions(new Actions());
-    }
-
-    private static Build prepareBuildClaimed() {
-        Actions actions = new Actions().setActions(asList(new Action().setClaimed(true).setReason("something wrong").setClaimedBy("user_1")));
-        return new Build().setResult("FAILURE").setActions(actions);
+        assertEquals(JOBS, result);
     }
 }
